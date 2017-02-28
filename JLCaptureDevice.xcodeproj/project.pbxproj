@@ -1,0 +1,530 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		42C1A1751E65127800C3D07D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1A1741E65127800C3D07D /* main.m */; };
+		42C1A1781E65127800C3D07D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1A1771E65127800C3D07D /* AppDelegate.m */; };
+		42C1A17B1E65127800C3D07D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1A17A1E65127800C3D07D /* ViewController.m */; };
+		42C1A17E1E65127800C3D07D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C1A17C1E65127800C3D07D /* Main.storyboard */; };
+		42C1A1801E65127800C3D07D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42C1A17F1E65127800C3D07D /* Assets.xcassets */; };
+		42C1A1831E65127800C3D07D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C1A1811E65127800C3D07D /* LaunchScreen.storyboard */; };
+		42C1A18E1E65127800C3D07D /* JLCaptureDeviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1A18D1E65127800C3D07D /* JLCaptureDeviceTests.m */; };
+		42C1A1991E65127800C3D07D /* JLCaptureDeviceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1A1981E65127800C3D07D /* JLCaptureDeviceUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		42C1A18A1E65127800C3D07D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42C1A1681E65127800C3D07D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42C1A16F1E65127800C3D07D;
+			remoteInfo = JLCaptureDevice;
+		};
+		42C1A1951E65127800C3D07D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42C1A1681E65127800C3D07D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42C1A16F1E65127800C3D07D;
+			remoteInfo = JLCaptureDevice;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		42C1A1701E65127800C3D07D /* JLCaptureDevice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JLCaptureDevice.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C1A1741E65127800C3D07D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		42C1A1761E65127800C3D07D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		42C1A1771E65127800C3D07D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		42C1A1791E65127800C3D07D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		42C1A17A1E65127800C3D07D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		42C1A17D1E65127800C3D07D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		42C1A17F1E65127800C3D07D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		42C1A1821E65127800C3D07D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		42C1A1841E65127800C3D07D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42C1A1891E65127800C3D07D /* JLCaptureDeviceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JLCaptureDeviceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C1A18D1E65127800C3D07D /* JLCaptureDeviceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JLCaptureDeviceTests.m; sourceTree = "<group>"; };
+		42C1A18F1E65127800C3D07D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42C1A1941E65127800C3D07D /* JLCaptureDeviceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JLCaptureDeviceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C1A1981E65127800C3D07D /* JLCaptureDeviceUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JLCaptureDeviceUITests.m; sourceTree = "<group>"; };
+		42C1A19A1E65127800C3D07D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		42C1A16D1E65127800C3D07D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42C1A1861E65127800C3D07D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42C1A1911E65127800C3D07D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		42C1A1671E65127800C3D07D = {
+			isa = PBXGroup;
+			children = (
+				42C1A1721E65127800C3D07D /* JLCaptureDevice */,
+				42C1A18C1E65127800C3D07D /* JLCaptureDeviceTests */,
+				42C1A1971E65127800C3D07D /* JLCaptureDeviceUITests */,
+				42C1A1711E65127800C3D07D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		42C1A1711E65127800C3D07D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42C1A1701E65127800C3D07D /* JLCaptureDevice.app */,
+				42C1A1891E65127800C3D07D /* JLCaptureDeviceTests.xctest */,
+				42C1A1941E65127800C3D07D /* JLCaptureDeviceUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		42C1A1721E65127800C3D07D /* JLCaptureDevice */ = {
+			isa = PBXGroup;
+			children = (
+				42C1A1761E65127800C3D07D /* AppDelegate.h */,
+				42C1A1771E65127800C3D07D /* AppDelegate.m */,
+				42C1A1791E65127800C3D07D /* ViewController.h */,
+				42C1A17A1E65127800C3D07D /* ViewController.m */,
+				42C1A17C1E65127800C3D07D /* Main.storyboard */,
+				42C1A17F1E65127800C3D07D /* Assets.xcassets */,
+				42C1A1811E65127800C3D07D /* LaunchScreen.storyboard */,
+				42C1A1841E65127800C3D07D /* Info.plist */,
+				42C1A1731E65127800C3D07D /* Supporting Files */,
+			);
+			path = JLCaptureDevice;
+			sourceTree = "<group>";
+		};
+		42C1A1731E65127800C3D07D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				42C1A1741E65127800C3D07D /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		42C1A18C1E65127800C3D07D /* JLCaptureDeviceTests */ = {
+			isa = PBXGroup;
+			children = (
+				42C1A18D1E65127800C3D07D /* JLCaptureDeviceTests.m */,
+				42C1A18F1E65127800C3D07D /* Info.plist */,
+			);
+			path = JLCaptureDeviceTests;
+			sourceTree = "<group>";
+		};
+		42C1A1971E65127800C3D07D /* JLCaptureDeviceUITests */ = {
+			isa = PBXGroup;
+			children = (
+				42C1A1981E65127800C3D07D /* JLCaptureDeviceUITests.m */,
+				42C1A19A1E65127800C3D07D /* Info.plist */,
+			);
+			path = JLCaptureDeviceUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42C1A16F1E65127800C3D07D /* JLCaptureDevice */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42C1A19D1E65127800C3D07D /* Build configuration list for PBXNativeTarget "JLCaptureDevice" */;
+			buildPhases = (
+				42C1A16C1E65127800C3D07D /* Sources */,
+				42C1A16D1E65127800C3D07D /* Frameworks */,
+				42C1A16E1E65127800C3D07D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JLCaptureDevice;
+			productName = JLCaptureDevice;
+			productReference = 42C1A1701E65127800C3D07D /* JLCaptureDevice.app */;
+			productType = "com.apple.product-type.application";
+		};
+		42C1A1881E65127800C3D07D /* JLCaptureDeviceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42C1A1A01E65127800C3D07D /* Build configuration list for PBXNativeTarget "JLCaptureDeviceTests" */;
+			buildPhases = (
+				42C1A1851E65127800C3D07D /* Sources */,
+				42C1A1861E65127800C3D07D /* Frameworks */,
+				42C1A1871E65127800C3D07D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42C1A18B1E65127800C3D07D /* PBXTargetDependency */,
+			);
+			name = JLCaptureDeviceTests;
+			productName = JLCaptureDeviceTests;
+			productReference = 42C1A1891E65127800C3D07D /* JLCaptureDeviceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		42C1A1931E65127800C3D07D /* JLCaptureDeviceUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42C1A1A31E65127800C3D07D /* Build configuration list for PBXNativeTarget "JLCaptureDeviceUITests" */;
+			buildPhases = (
+				42C1A1901E65127800C3D07D /* Sources */,
+				42C1A1911E65127800C3D07D /* Frameworks */,
+				42C1A1921E65127800C3D07D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42C1A1961E65127800C3D07D /* PBXTargetDependency */,
+			);
+			name = JLCaptureDeviceUITests;
+			productName = JLCaptureDeviceUITests;
+			productReference = 42C1A1941E65127800C3D07D /* JLCaptureDeviceUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		42C1A1681E65127800C3D07D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = mini1;
+				TargetAttributes = {
+					42C1A16F1E65127800C3D07D = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+					42C1A1881E65127800C3D07D = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 42C1A16F1E65127800C3D07D;
+					};
+					42C1A1931E65127800C3D07D = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 42C1A16F1E65127800C3D07D;
+					};
+				};
+			};
+			buildConfigurationList = 42C1A16B1E65127800C3D07D /* Build configuration list for PBXProject "JLCaptureDevice" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 42C1A1671E65127800C3D07D;
+			productRefGroup = 42C1A1711E65127800C3D07D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42C1A16F1E65127800C3D07D /* JLCaptureDevice */,
+				42C1A1881E65127800C3D07D /* JLCaptureDeviceTests */,
+				42C1A1931E65127800C3D07D /* JLCaptureDeviceUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		42C1A16E1E65127800C3D07D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42C1A1831E65127800C3D07D /* LaunchScreen.storyboard in Resources */,
+				42C1A1801E65127800C3D07D /* Assets.xcassets in Resources */,
+				42C1A17E1E65127800C3D07D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42C1A1871E65127800C3D07D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42C1A1921E65127800C3D07D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		42C1A16C1E65127800C3D07D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42C1A17B1E65127800C3D07D /* ViewController.m in Sources */,
+				42C1A1781E65127800C3D07D /* AppDelegate.m in Sources */,
+				42C1A1751E65127800C3D07D /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42C1A1851E65127800C3D07D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42C1A18E1E65127800C3D07D /* JLCaptureDeviceTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42C1A1901E65127800C3D07D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42C1A1991E65127800C3D07D /* JLCaptureDeviceUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		42C1A18B1E65127800C3D07D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42C1A16F1E65127800C3D07D /* JLCaptureDevice */;
+			targetProxy = 42C1A18A1E65127800C3D07D /* PBXContainerItemProxy */;
+		};
+		42C1A1961E65127800C3D07D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42C1A16F1E65127800C3D07D /* JLCaptureDevice */;
+			targetProxy = 42C1A1951E65127800C3D07D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		42C1A17C1E65127800C3D07D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				42C1A17D1E65127800C3D07D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		42C1A1811E65127800C3D07D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				42C1A1821E65127800C3D07D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		42C1A19B1E65127800C3D07D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		42C1A19C1E65127800C3D07D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		42C1A19E1E65127800C3D07D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = JLCaptureDevice/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = mini1.JLCaptureDevice;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		42C1A19F1E65127800C3D07D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = JLCaptureDevice/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = mini1.JLCaptureDevice;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		42C1A1A11E65127800C3D07D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = JLCaptureDeviceTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = mini1.JLCaptureDeviceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JLCaptureDevice.app/JLCaptureDevice";
+			};
+			name = Debug;
+		};
+		42C1A1A21E65127800C3D07D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = JLCaptureDeviceTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = mini1.JLCaptureDeviceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JLCaptureDevice.app/JLCaptureDevice";
+			};
+			name = Release;
+		};
+		42C1A1A41E65127800C3D07D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = JLCaptureDeviceUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = mini1.JLCaptureDeviceUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = JLCaptureDevice;
+			};
+			name = Debug;
+		};
+		42C1A1A51E65127800C3D07D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = JLCaptureDeviceUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = mini1.JLCaptureDeviceUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = JLCaptureDevice;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		42C1A16B1E65127800C3D07D /* Build configuration list for PBXProject "JLCaptureDevice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42C1A19B1E65127800C3D07D /* Debug */,
+				42C1A19C1E65127800C3D07D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42C1A19D1E65127800C3D07D /* Build configuration list for PBXNativeTarget "JLCaptureDevice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42C1A19E1E65127800C3D07D /* Debug */,
+				42C1A19F1E65127800C3D07D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		42C1A1A01E65127800C3D07D /* Build configuration list for PBXNativeTarget "JLCaptureDeviceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42C1A1A11E65127800C3D07D /* Debug */,
+				42C1A1A21E65127800C3D07D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		42C1A1A31E65127800C3D07D /* Build configuration list for PBXNativeTarget "JLCaptureDeviceUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42C1A1A41E65127800C3D07D /* Debug */,
+				42C1A1A51E65127800C3D07D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 42C1A1681E65127800C3D07D /* Project object */;
+}
