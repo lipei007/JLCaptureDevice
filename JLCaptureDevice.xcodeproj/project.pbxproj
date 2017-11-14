@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42B149461E669EF000509214 /* Replace.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B149451E669EF000509214 /* Replace.png */; };
+		42B149481E669F4500509214 /* Aperture.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B149471E669F4500509214 /* Aperture.png */; };
+		42B1494A1E669F9000509214 /* Flash Auto.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B149491E669F9000509214 /* Flash Auto.png */; };
+		42B1494C1E669F9700509214 /* Flash Off.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B1494B1E669F9700509214 /* Flash Off.png */; };
+		42B1494E1E669F9D00509214 /* Flash On.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B1494D1E669F9D00509214 /* Flash On.png */; };
 		42C1A1751E65127800C3D07D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1A1741E65127800C3D07D /* main.m */; };
 		42C1A1781E65127800C3D07D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1A1771E65127800C3D07D /* AppDelegate.m */; };
 		42C1A17B1E65127800C3D07D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1A17A1E65127800C3D07D /* ViewController.m */; };
@@ -35,6 +40,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		42B149451E669EF000509214 /* Replace.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Replace.png; sourceTree = "<group>"; };
+		42B149471E669F4500509214 /* Aperture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Aperture.png; sourceTree = "<group>"; };
+		42B149491E669F9000509214 /* Flash Auto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flash Auto.png"; sourceTree = "<group>"; };
+		42B1494B1E669F9700509214 /* Flash Off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flash Off.png"; sourceTree = "<group>"; };
+		42B1494D1E669F9D00509214 /* Flash On.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flash On.png"; sourceTree = "<group>"; };
 		42C1A1701E65127800C3D07D /* JLCaptureDevice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JLCaptureDevice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C1A1741E65127800C3D07D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		42C1A1761E65127800C3D07D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -78,6 +88,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4297D11E1E67F62200012AC6 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				42B149451E669EF000509214 /* Replace.png */,
+				42B149471E669F4500509214 /* Aperture.png */,
+				42B149491E669F9000509214 /* Flash Auto.png */,
+				42B1494B1E669F9700509214 /* Flash Off.png */,
+				42B1494D1E669F9D00509214 /* Flash On.png */,
+			);
+			name = image;
+			sourceTree = "<group>";
+		};
 		42C1A1671E65127800C3D07D = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +123,7 @@
 		42C1A1721E65127800C3D07D /* JLCaptureDevice */ = {
 			isa = PBXGroup;
 			children = (
+				4297D11E1E67F62200012AC6 /* image */,
 				42C1A1761E65127800C3D07D /* AppDelegate.h */,
 				42C1A1771E65127800C3D07D /* AppDelegate.m */,
 				42C1A1791E65127800C3D07D /* ViewController.h */,
@@ -207,6 +230,7 @@
 				TargetAttributes = {
 					42C1A16F1E65127800C3D07D = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = Y9TW8FTXP2;
 						ProvisioningStyle = Automatic;
 					};
 					42C1A1881E65127800C3D07D = {
@@ -246,8 +270,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42B1494A1E669F9000509214 /* Flash Auto.png in Resources */,
 				42C1A1831E65127800C3D07D /* LaunchScreen.storyboard in Resources */,
+				42B1494E1E669F9D00509214 /* Flash On.png in Resources */,
+				42B149481E669F4500509214 /* Aperture.png in Resources */,
 				42C1A1801E65127800C3D07D /* Assets.xcassets in Resources */,
+				42B1494C1E669F9700509214 /* Flash Off.png in Resources */,
+				42B149461E669EF000509214 /* Replace.png in Resources */,
 				42C1A17E1E65127800C3D07D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,9 +453,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Y9TW8FTXP2;
 				INFOPLIST_FILE = JLCaptureDevice/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = mini1.JLCaptureDevice;
+				PRODUCT_BUNDLE_IDENTIFIER = com.buakaw.www.JLCaptureDevice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -435,9 +466,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Y9TW8FTXP2;
 				INFOPLIST_FILE = JLCaptureDevice/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = mini1.JLCaptureDevice;
+				PRODUCT_BUNDLE_IDENTIFIER = com.buakaw.www.JLCaptureDevice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -507,6 +540,7 @@
 				42C1A19F1E65127800C3D07D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		42C1A1A01E65127800C3D07D /* Build configuration list for PBXNativeTarget "JLCaptureDeviceTests" */ = {
 			isa = XCConfigurationList;
@@ -515,6 +549,7 @@
 				42C1A1A21E65127800C3D07D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		42C1A1A31E65127800C3D07D /* Build configuration list for PBXNativeTarget "JLCaptureDeviceUITests" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +558,7 @@
 				42C1A1A51E65127800C3D07D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -3,7 +3,7 @@
 //  JLCaptureDeviceTests
 //
 //  Created by Jack on 2017/2/28.
-//  Copyright © 2017年 mini1. All rights reserved.
+//  Copyright © 2017年 Emerys. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
