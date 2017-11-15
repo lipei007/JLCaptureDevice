@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import <AVFoundation/AVFoundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface ViewController ()<AVCaptureFileOutputRecordingDelegate>
 
@@ -37,16 +38,19 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     [self initCamera];
-    
+
     CGRect frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetMinY(self.controlView.frame));
-    
+
     self.previewLayer.frame = frame;
     self.contentView.frame = frame;
-    
+
     [self.view.layer addSublayer:self.previewLayer];
 
     [self.view addSubview:self.contentView];
     
+//    NSString *dir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+//    NSString *outputFielPath=[dir stringByAppendingPathComponent:@"201711319224601.mov"];
+//    [self save:outputFielPath];
 }
 
 - (UIView *)contentView {
@@ -292,6 +296,10 @@
     
     // session
     _captureSession = [[AVCaptureSession alloc] init];
+    // 设置图形采集质量
+    if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
+        _captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
+    }
     
     // device
     _captureDevice = [self videoDevicePosition:AVCaptureDevicePositionBack];
@@ -317,10 +325,12 @@
         return;
     }
     
+    // 初始化视频输出
     _fileOutput = [[AVCaptureMovieFileOutput alloc] init];
     
     // 初始化设备输出对象，用于获得输出数据
     _imageOutput = [[AVCaptureStillImageOutput alloc] init];
+    // 设置图形输出格式
     NSDictionary * outputSettings = @{AVVideoCodecKey:AVVideoCodecJPEG};
     // 输出设置
     [_imageOutput setOutputSettings:outputSettings];
@@ -329,13 +339,13 @@
     if ([_captureSession canAddInput:_captureInput]) {
         
         [_captureSession addInput:_captureInput];
-        [_captureSession addInput:_audioInput];
-        
-        AVCaptureConnection * captureConnection = [_fileOutput connectionWithMediaType:AVMediaTypeVideo];
-
-        if ([captureConnection isVideoStabilizationSupported]) {
-            captureConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
-        }
+//        [_captureSession addInput:_audioInput];
+//
+//        AVCaptureConnection * captureConnection = [_fileOutput connectionWithMediaType:AVMediaTypeVideo];
+//
+//        if ([captureConnection isVideoStabilizationSupported]) {
+//            captureConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
+//        }
     }
     
     // 将设输出添加到会话中
@@ -343,9 +353,9 @@
         [_captureSession addOutput:_imageOutput];
     }
     
-    if ([_captureSession canAddOutput:_fileOutput]) {
-        [_captureSession addOutput:_fileOutput];
-    }
+//    if ([_captureSession canAddOutput:_fileOutput]) {
+//        [_captureSession addOutput:_fileOutput];
+//    }
     
     // Init PreviewLayer
     _previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
@@ -363,14 +373,32 @@
     
     NSLog(@"finish recording");
     if (!error) {
-        [self performSelector:@selector(saveVideoAtURL:) withObject:outputFileURL afterDelay:5];
+        [self saveVideoAtURL:outputFileURL];
     }
 }
 
 - (void)saveVideoAtURL:(NSURL *)url {
-    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.absoluteString)) {
-        UISaveVideoAtPathToSavedPhotosAlbum(url.absoluteString,self,@selector(video:didFinishSavingWithError:contextInfo:),nil);
-    }
+    /**
+     * url.absoluteString != url.path
+     * url.absoluteString : file://.....
+     * url.path           : .......
+     */
+//    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.absoluteString)) {
+//        UISaveVideoAtPathToSavedPhotosAlbum(url.absoluteString,self,@selector(video:didFinishSavingWithError:contextInfo:),nil);
+//    }
+    [self save:url.path];
+}
+
+- (void)save:(NSString*)urlString{
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+    [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:urlString]
+                                completionBlock:^(NSURL *assetURL, NSError *error) {
+                                    if (error) {
+                                        NSLog(@"Save video fail:%@",error);
+                                    } else {
+                                        NSLog(@"Save video succeed.");
+                                    }
+                                }];
 }
 
 // save video complete selector
@@ -423,20 +451,47 @@
             [self.fileOutput stopRecording];
             
         } else {
+            [_captureSession removeOutput:_imageOutput];
+            // 添加音频输入
+            if ([_captureSession canAddInput:_audioInput]) {
+                [_captureSession addInput:_audioInput];
+            } else {
+                NSLog(@"init audio failed");
+            }
+            // 添加MovieFile输出
+            if ([_captureSession canAddOutput:_fileOutput]) {
+                [_captureSession addOutput:_fileOutput];
+            } else {
+                NSLog(@"init to record movie false");
+                return;
+            }
+
+            // 默认值就是10秒。解决超出10s时长的视频无声音
+            _fileOutput.movieFragmentInterval = kCMTimeInvalid;
+            
             //根据设备输出获得连接
             AVCaptureConnection *captureConnection=[self.fileOutput connectionWithMediaType:AVMediaTypeVideo];
             
             //预览图层和视频方向保持一致
-            captureConnection.videoOrientation=[self.previewLayer connection].videoOrientation;
+            if (captureConnection.isVideoOrientationSupported) {
+                captureConnection.videoOrientation=[self.previewLayer connection].videoOrientation;
+            }
+            if ([captureConnection isVideoStabilizationSupported]) {
+                captureConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
+            }
+            
+            
+            [self configureMovieVar:self.fileOutput];
+            [self addMetaDataForMovieOutputFile:self.fileOutput];
             
             // 根据时间设置视频名称
             NSDate *date = [NSDate date];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             formatter.dateFormat = @"YYYYMMDDHHmmss";
             NSString *name = [formatter stringFromDate:date];
-            NSString *dir = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
-            NSString *outputFielPath=[dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",name]];
-            
+            NSString *dir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+            NSString *outputFielPath=[dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mov",name]];
+
             NSURL *fileUrl=[NSURL fileURLWithPath:outputFielPath];
             [self.fileOutput startRecordingToOutputFileURL:fileUrl recordingDelegate:self];
         }
@@ -529,6 +584,44 @@
     
 }
 
+#pragma mark - Configure Movie
+
+- (void)addMetaDataForMovieOutputFile:(AVCaptureMovieFileOutput *)aMovieFileOutput {
+    
+    NSArray *existingMetadataArray = aMovieFileOutput.metadata;
+    NSMutableArray *newMetadataArray = nil;
+    if (existingMetadataArray) {
+        newMetadataArray = [existingMetadataArray mutableCopy];
+    }
+    else {
+        newMetadataArray = [[NSMutableArray alloc] init];
+    }
+    
+    AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
+    item.keySpace = AVMetadataKeySpaceCommon;
+//    item.key = AVMetadataCommonKeyLocation;
+//
+//    CLLocation *location - <#The location to set#>;
+//    item.value = [NSString stringWithFormat:@"%+08.4lf%+09.4lf/"
+//                  location.coordinate.latitude, location.coordinate.longitude];
+//
+//    [newMetadataArray addObject:item];
+//
+    
+    item.key = AVMetadataCommonKeyModel;
+    item.value = [UIDevice currentDevice].model;
+    aMovieFileOutput.metadata = newMetadataArray;
+}
+
+- (void)configureMovieVar:(AVCaptureMovieFileOutput *)aMovieFileOutput {
+
+//    CMTime maxDuration = <#Create a CMTime to represent the maximum duration#>;
+//    aMovieFileOutput.maxRecordedDuration = maxDuration;
+//    aMovieFileOutput.minFreeDiskSpaceLimit = <#An appropriate minimum given the quality of the movie format and the duration#>;
+//    The resolution and bit rate for the output depend on the capture session’s sessionPreset. The video encoding is typically H.264 and audio encoding is typically AAC. The actual values vary by device.
+
+    
+}
 
 
 @end
