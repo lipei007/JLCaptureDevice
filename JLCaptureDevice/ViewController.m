@@ -10,6 +10,16 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
+typedef enum {
+    JLCaptureModeTakePicture,
+    JLCaptureModeRecordMovie
+}JLCaptureMode;
+
+typedef enum {
+    JLStatusStop,
+    JLStatusRecording
+}JLStatus;
+
 @interface ViewController ()<AVCaptureFileOutputRecordingDelegate>
 
 @property (strong, nonatomic) IBOutlet UIButton *CameraPositionChangeBtn;
@@ -24,6 +34,8 @@
 @property (nonatomic,strong) AVCaptureDeviceInput *audioInput;///<音频输入
 @property (nonatomic,strong) AVCaptureMovieFileOutput *fileOutput;///<视频输出
 @property (nonatomic,strong) AVCaptureStillImageOutput *imageOutput;///<照片输出
+@property (nonatomic,assign) JLCaptureMode mode;
+@property (nonatomic,assign) JLStatus recordStatus;
 
 #pragma mark - View
 @property (nonatomic,strong) AVCaptureVideoPreviewLayer *previewLayer;
@@ -47,10 +59,8 @@
     [self.view.layer addSublayer:self.previewLayer];
 
     [self.view addSubview:self.contentView];
-    
-//    NSString *dir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-//    NSString *outputFielPath=[dir stringByAppendingPathComponent:@"201711319224601.mov"];
-//    [self save:outputFielPath];
+
+    self.mode = JLCaptureModeRecordMovie;
 }
 
 - (UIView *)contentView {
@@ -292,126 +302,135 @@
 
 #pragma mark - Init
 
-- (void)initCamera {
+- (void)initRecordMovie {
     
-    // session
-    _captureSession = [[AVCaptureSession alloc] init];
-    // 设置图形采集质量
-    if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
-        _captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
-    }
-    
-    // device
-    _captureDevice = [self videoDevicePosition:AVCaptureDevicePositionBack];
-
-    if (!_captureDevice) {
-        NSLog(@"no back camera");
-        return;
+    // 移除图像输出
+    if (_imageOutput && [_captureSession.outputs containsObject:_imageOutput]) {
+        [_captureSession removeOutput:_imageOutput];
     }
     
     NSError *error;
-    //添加一个音频输入设备
-    AVCaptureDevice * audioDevice = [[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio] firstObject];
-    _audioInput = [[AVCaptureDeviceInput alloc] initWithDevice:audioDevice error:&error];
-    if (error) {
-        NSLog(@"audio device error：%@",error.localizedDescription);
-        return;
+    // 初始化音频
+    if (!_audioInput) {
+        AVCaptureDevice * audioDevice = [[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio] firstObject];
+        _audioInput = [[AVCaptureDeviceInput alloc] initWithDevice:audioDevice error:&error];
+        if (error) {
+            NSLog(@"audio device error：%@",error.localizedDescription);
+            return;
+        }
     }
-    
-    // 根据输入设备初始化设备输入对象，用于获得输入数据
-    _captureInput = [[AVCaptureDeviceInput alloc]initWithDevice:_captureDevice error:&error];
-    if (error) {
-        NSLog(@"input error：%@",error.localizedDescription);
-        return;
-    }
-    
     // 初始化视频输出
-    _fileOutput = [[AVCaptureMovieFileOutput alloc] init];
+    if (!_fileOutput) {
+        _fileOutput = [[AVCaptureMovieFileOutput alloc] init];
+    }
+    
+    // 添加音频输入
+    if ([_captureSession canAddInput:_audioInput]) {
+        [_captureSession addInput:_audioInput];
+    } else {
+        NSLog(@"init audio failed");
+    }
+    // 添加MovieFile输出
+    if ([_captureSession canAddOutput:_fileOutput]) {
+        [_captureSession addOutput:_fileOutput];
+    } else {
+        NSLog(@"init to record movie false");
+        return;
+    }
+    
+    // 默认值就是10秒。解决超出10s时长的视频无声音
+    _fileOutput.movieFragmentInterval = kCMTimeInvalid;
+    
+    //根据设备输出获得连接
+    AVCaptureConnection *captureConnection=[self.fileOutput connectionWithMediaType:AVMediaTypeVideo];
+    
+    //预览图层和视频方向保持一致
+    if (captureConnection.isVideoOrientationSupported) {
+        captureConnection.videoOrientation=[self.previewLayer connection].videoOrientation;
+    }
+    if ([captureConnection isVideoStabilizationSupported]) { // 防抖
+        captureConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
+    }
+
+    [self configureMovieVar:self.fileOutput];
+    [self addMetaDataForMovieOutputFile:self.fileOutput];
+}
+
+- (void)initTakePicture {
+    // 移除视频输出
+    if (_fileOutput && [_captureSession.outputs containsObject:_fileOutput]) {
+        [_captureSession removeOutput:_fileOutput];
+    }
+    // 移除音频输入
+    if (_audioInput && [_captureSession.inputs containsObject:_audioInput]) {
+        [_captureSession removeInput:_audioInput];
+    }
     
     // 初始化设备输出对象，用于获得输出数据
-    _imageOutput = [[AVCaptureStillImageOutput alloc] init];
+    if (!_imageOutput) {
+        _imageOutput = [[AVCaptureStillImageOutput alloc] init];
+    }
+    
     // 设置图形输出格式
     NSDictionary * outputSettings = @{AVVideoCodecKey:AVVideoCodecJPEG};
     // 输出设置
     [_imageOutput setOutputSettings:outputSettings];
     
-    // 将设备输入添加到会话中
-    if ([_captureSession canAddInput:_captureInput]) {
-        
-        [_captureSession addInput:_captureInput];
-//        [_captureSession addInput:_audioInput];
-//
-//        AVCaptureConnection * captureConnection = [_fileOutput connectionWithMediaType:AVMediaTypeVideo];
-//
-//        if ([captureConnection isVideoStabilizationSupported]) {
-//            captureConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
-//        }
-    }
-    
     // 将设输出添加到会话中
     if ([_captureSession canAddOutput:_imageOutput]) {
         [_captureSession addOutput:_imageOutput];
     }
-    
-//    if ([_captureSession canAddOutput:_fileOutput]) {
-//        [_captureSession addOutput:_fileOutput];
-//    }
-    
+}
+
+- (void)initCamera {
+
+    // session
+    _captureSession = [[AVCaptureSession alloc] init];
+
+    // device
+    if (!_captureDevice) {
+        _captureDevice = [self videoDevicePosition:AVCaptureDevicePositionBack];
+        if (!_captureDevice) {
+            NSLog(@"no back camera");
+            return;
+        }
+    }
+    // 初始化图像输入
+    NSError *error;
+    // 根据输入设备初始化设备输入对象，用于获得输入数据
+    _captureInput = [[AVCaptureDeviceInput alloc] initWithDevice:_captureDevice error:&error];
+    if (error) {
+        NSLog(@"input error：%@",error.localizedDescription);
+        return;
+    }
+    // 将设备输入添加到会话中
+    if ([_captureSession canAddInput:_captureInput]) {
+
+        [_captureSession addInput:_captureInput];
+
+        // 设置图形采集质量，在设置Input之后。切换Input之前重置采集质量
+        if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
+            _captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
+        }
+
+    } else {
+        NSLog(@"can't add capture input");
+    }
+
+
     // Init PreviewLayer
     _previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:_captureSession];
     _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     [_captureSession startRunning];
 }
 
-#pragma mark - File Output Recording Delegate
+#pragma mark - Change Device Or Mode
 
-- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didStartRecordingToOutputFileAtURL:(NSURL *)fileURL fromConnections:(NSArray *)connections {
-    NSLog(@"start recording");
-}
-
-- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error {
-    
-    NSLog(@"finish recording");
-    if (!error) {
-        [self saveVideoAtURL:outputFileURL];
+- (void)changeCaptureDevice {
+    if (self.mode == JLCaptureModeRecordMovie && self.recordStatus == JLStatusRecording) {
+        [self stopRecordMovie];
     }
-}
 
-- (void)saveVideoAtURL:(NSURL *)url {
-    /**
-     * url.absoluteString != url.path
-     * url.absoluteString : file://.....
-     * url.path           : .......
-     */
-//    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.absoluteString)) {
-//        UISaveVideoAtPathToSavedPhotosAlbum(url.absoluteString,self,@selector(video:didFinishSavingWithError:contextInfo:),nil);
-//    }
-    [self save:url.path];
-}
-
-- (void)save:(NSString*)urlString{
-    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-    [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:urlString]
-                                completionBlock:^(NSURL *assetURL, NSError *error) {
-                                    if (error) {
-                                        NSLog(@"Save video fail:%@",error);
-                                    } else {
-                                        NSLog(@"Save video succeed.");
-                                    }
-                                }];
-}
-
-// save video complete selector
-- (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
-    if (error) {
-        NSLog(@"save video error: %@",error);
-    }
-}
-
-#pragma mark - Btn Action
-
-- (IBAction)changeCameraClick:(UIButton *)sender {
-    
     AVCaptureDevice * currentDevice = [self.captureInput device];
     AVCaptureDevicePosition currentPosition = [currentDevice position];
 
@@ -424,91 +443,135 @@
     }
     toChangeDevice = [self videoDevicePosition:toChangePosition];
 
-    
+
     //获得要调整到设备输入对象
-    AVCaptureDeviceInput * toChangeDeviceInput = [[AVCaptureDeviceInput alloc]initWithDevice:toChangeDevice error:nil];
-    
+    NSError *error;
+    AVCaptureDeviceInput * toChangeDeviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:toChangeDevice error:&error];
+    if (error) {
+        NSLog(@"change camera error: %@",error);
+        return;
+    }
+
     //改变会话到配置前一定要先开启配置，配置完成后提交配置改变
     [self.captureSession beginConfiguration];
+
+    // 设置图形采集质量，在设置Input之后。切换Input之前重置采集质量
+    if ([_captureSession canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+        _captureSession.sessionPreset = AVCaptureSessionPresetHigh;
+    }
     //移除原有输入对象
     [self.captureSession removeInput:self.captureInput];
     //添加新的输入对象
     if ([self.captureSession canAddInput:toChangeDeviceInput]) {
+        
+
         [self.captureSession addInput:toChangeDeviceInput];
         self.captureInput=toChangeDeviceInput;
+
+        //
+        _captureDevice = toChangeDevice;
+        
+        // 设置图形采集质量，在设置Input之后。切换Input之前重置采集质量
+        if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
+            _captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
+        } else {
+            if ([_captureSession canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+                _captureSession.sessionPreset = AVCaptureSessionPresetHigh;
+            }
+        }
+        
+    } else {
+        NSLog(@"can't add capture input");
+        // 恢复原来输入
+        if ([self.captureSession canAddInput:self.captureInput]) {
+            [self.captureSession addInput:self.captureInput];
+        }
+        // 设置图形采集质量，在设置Input之后。切换Input之前重置采集质量
+        if ([_captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
+            _captureSession.sessionPreset = AVCaptureSessionPreset1920x1080;
+        } else {
+            if ([_captureSession canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+                _captureSession.sessionPreset = AVCaptureSessionPresetHigh;
+            }
+        }
     }
-    
+
     //提交新的输入对象
     [self.captureSession commitConfiguration];
+    
+}
+
+- (void)changeMode {
+    if (self.mode == JLCaptureModeRecordMovie) {
+        [self stopRecordMovie];
+        self.mode = JLCaptureModeTakePicture;
+    } else if (self.mode == JLCaptureModeTakePicture) {
+        self.mode = JLCaptureModeRecordMovie;
+    }
+}
+
+#pragma mark - Take Picture Or Record
+
+- (void)startRecordMovie {
+    if (self.mode == JLCaptureModeTakePicture) {
+        return;
+    }
+    
+    [self initRecordMovie];
+    
+    NSURL *fileUrl=[NSURL fileURLWithPath:[self movieOutputPath]];
+    [self.fileOutput startRecordingToOutputFileURL:fileUrl recordingDelegate:self];
+}
+
+- (void)stopRecordMovie {
+    if (self.mode == JLCaptureModeTakePicture) {
+        return;
+    }
+    if ([self.fileOutput isRecording]) {
+        [self.fileOutput stopRecording];
+    }
+}
+
+- (void)takePicture {
+    if (self.mode == JLCaptureModeRecordMovie) {
+        return;
+    }
+    
+    [self initTakePicture];
+    
+    // 拍照
+    //根据设备输出获得连接
+    AVCaptureConnection *captureConnection=[self.imageOutput connectionWithMediaType:AVMediaTypeVideo];
+    //根据连接取得设备输出的数据
+    [self.imageOutput captureStillImageAsynchronouslyFromConnection:captureConnection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+        if (imageDataSampleBuffer) {
+            NSData *imageData=[AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+            UIImage *image=[UIImage imageWithData:imageData];
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+            
+        }
+        
+    }];
+}
+
+#pragma mark - Btn Action
+
+- (IBAction)changeCameraClick:(UIButton *)sender {
+
+    [self changeCaptureDevice];
 
 }
 
 - (IBAction)takePressed:(UIButton *)sender {
     
-    if (self.switchBtn.on) {
-        if ([self.fileOutput isRecording]) {
-            
-            [self.fileOutput stopRecording];
-            
-        } else {
-            [_captureSession removeOutput:_imageOutput];
-            // 添加音频输入
-            if ([_captureSession canAddInput:_audioInput]) {
-                [_captureSession addInput:_audioInput];
-            } else {
-                NSLog(@"init audio failed");
-            }
-            // 添加MovieFile输出
-            if ([_captureSession canAddOutput:_fileOutput]) {
-                [_captureSession addOutput:_fileOutput];
-            } else {
-                NSLog(@"init to record movie false");
-                return;
-            }
-
-            // 默认值就是10秒。解决超出10s时长的视频无声音
-            _fileOutput.movieFragmentInterval = kCMTimeInvalid;
-            
-            //根据设备输出获得连接
-            AVCaptureConnection *captureConnection=[self.fileOutput connectionWithMediaType:AVMediaTypeVideo];
-            
-            //预览图层和视频方向保持一致
-            if (captureConnection.isVideoOrientationSupported) {
-                captureConnection.videoOrientation=[self.previewLayer connection].videoOrientation;
-            }
-            if ([captureConnection isVideoStabilizationSupported]) {
-                captureConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
-            }
-            
-            
-            [self configureMovieVar:self.fileOutput];
-            [self addMetaDataForMovieOutputFile:self.fileOutput];
-            
-            // 根据时间设置视频名称
-            NSDate *date = [NSDate date];
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            formatter.dateFormat = @"YYYYMMDDHHmmss";
-            NSString *name = [formatter stringFromDate:date];
-            NSString *dir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-            NSString *outputFielPath=[dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mov",name]];
-
-            NSURL *fileUrl=[NSURL fileURLWithPath:outputFielPath];
-            [self.fileOutput startRecordingToOutputFileURL:fileUrl recordingDelegate:self];
+    if (self.mode == JLCaptureModeTakePicture) {
+        [self takePicture];
+    } else if (self.mode == JLCaptureModeRecordMovie) {
+        if (self.recordStatus == JLStatusRecording) {
+            [self stopRecordMovie];
+        } else if (self.recordStatus == JLStatusStop) {
+            [self startRecordMovie];
         }
-    } else {
-        // 拍照
-        //根据设备输出获得连接
-        AVCaptureConnection *captureConnection=[self.imageOutput connectionWithMediaType:AVMediaTypeVideo];
-        //根据连接取得设备输出的数据
-        [self.imageOutput captureStillImageAsynchronouslyFromConnection:captureConnection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
-            if (imageDataSampleBuffer) {
-                NSData *imageData=[AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-                UIImage *image=[UIImage imageWithData:imageData];
-                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-                
-            }
-            
-        }];
     }
 }
 
@@ -584,7 +647,7 @@
     
 }
 
-#pragma mark - Configure Movie
+#pragma mark - Movie
 
 - (void)addMetaDataForMovieOutputFile:(AVCaptureMovieFileOutput *)aMovieFileOutput {
     
@@ -621,6 +684,69 @@
 //    The resolution and bit rate for the output depend on the capture session’s sessionPreset. The video encoding is typically H.264 and audio encoding is typically AAC. The actual values vary by device.
 
     
+}
+
+#pragma mark - Save Movie
+
+- (void)saveVideoAtURL:(NSURL *)url {
+    /**
+     * url.absoluteString != url.path
+     * url.absoluteString : file://.....
+     * url.path           : .......
+     */
+    //    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.absoluteString)) {
+    //        UISaveVideoAtPathToSavedPhotosAlbum(url.absoluteString,self,@selector(video:didFinishSavingWithError:contextInfo:),nil);
+    //    }
+    [self save:url.path];
+}
+
+- (void)save:(NSString*)urlString{
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+    [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:urlString]
+                                completionBlock:^(NSURL *assetURL, NSError *error) {
+                                    if (error) {
+                                        NSLog(@"Save video fail:%@",error);
+                                    } else {
+                                        NSLog(@"Save video succeed.");
+                                    }
+                                }];
+}
+
+// save video complete selector
+- (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    if (error) {
+        NSLog(@"save video error: %@",error);
+    }
+}
+
+#pragma mark - File Output Recording Delegate
+
+- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didStartRecordingToOutputFileAtURL:(NSURL *)fileURL fromConnections:(NSArray *)connections {
+    NSLog(@"start recording");
+    self.recordStatus = JLStatusRecording;
+}
+
+- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error {
+    
+    NSLog(@"finish recording");
+    self.recordStatus = JLStatusStop;
+    if (!error) {
+        [self saveVideoAtURL:outputFileURL];
+    }
+}
+
+
+#pragma mark - Save Path
+
+- (NSString *)movieOutputPath {
+    // 根据时间设置视频名称
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"YYYYMMDDHHmmss";
+    NSString *MovieName = [formatter stringFromDate:date];
+    NSString *ouputeDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *outputPath =[ouputeDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mov",MovieName]];
+    return outputPath;
 }
 
 
