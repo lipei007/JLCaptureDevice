@@ -2,14 +2,12 @@
 //  ViewController.h
 //  JLCaptureDevice
 //
-//  Created by Jack on 2017/2/28.
-//  Copyright © 2017年 Emerys. All rights reserved.
+//  Created by jack lee on 2017/11/17.
+//  Copyright © 2017年 mini1. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "JLCaptureViewController.h"
 
-@interface ViewController : UIViewController
-
+@interface ViewController : JLCaptureViewController
 
 @end
-

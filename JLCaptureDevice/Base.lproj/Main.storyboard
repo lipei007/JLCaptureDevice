@@ -81,7 +81,7 @@
                                 <constraints>
                                     <constraint firstItem="Cf2-zF-GU2" firstAttribute="top" secondItem="7dX-hN-07J" secondAttribute="top" constant="10" id="2WM-De-Lwo"/>
                                     <constraint firstItem="Q3P-Lj-O2h" firstAttribute="centerY" secondItem="6CG-8P-io5" secondAttribute="centerY" id="45B-9U-ZSc"/>
-                                    <constraint firstItem="vOV-nr-31e" firstAttribute="leading" secondItem="Q3P-Lj-O2h" secondAttribute="trailing" constant="36" id="5Ak-Si-w9M"/>
+                                    <constraint firstItem="vOV-nr-31e" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Q3P-Lj-O2h" secondAttribute="trailing" symbolic="YES" id="5Ak-Si-w9M"/>
                                     <constraint firstItem="Q3P-Lj-O2h" firstAttribute="height" secondItem="6CG-8P-io5" secondAttribute="height" id="6G4-bL-V1O"/>
                                     <constraint firstItem="Q3P-Lj-O2h" firstAttribute="width" secondItem="6CG-8P-io5" secondAttribute="width" id="9t4-s3-AA8"/>
                                     <constraint firstItem="vOV-nr-31e" firstAttribute="height" secondItem="Q3P-Lj-O2h" secondAttribute="height" id="HO0-TL-bWg"/>
@@ -95,6 +95,7 @@
                                     <constraint firstItem="6CG-8P-io5" firstAttribute="height" secondItem="Cf2-zF-GU2" secondAttribute="height" id="hcT-xG-zm7"/>
                                     <constraint firstItem="zFN-cl-6oA" firstAttribute="top" secondItem="7dX-hN-07J" secondAttribute="top" constant="10" id="jJl-ag-ffK"/>
                                     <constraint firstItem="41s-1Y-wpd" firstAttribute="centerY" secondItem="7dX-hN-07J" secondAttribute="centerY" id="mHm-d8-Y1C"/>
+                                    <constraint firstAttribute="trailing" secondItem="vOV-nr-31e" secondAttribute="trailing" constant="73" id="mVH-H9-QeS"/>
                                     <constraint firstItem="6CG-8P-io5" firstAttribute="width" secondItem="Cf2-zF-GU2" secondAttribute="width" id="rxu-mv-3Zt"/>
                                     <constraint firstItem="Q3P-Lj-O2h" firstAttribute="leading" secondItem="6CG-8P-io5" secondAttribute="trailing" constant="36" id="xtL-jo-fRy"/>
                                     <constraint firstItem="6CG-8P-io5" firstAttribute="centerY" secondItem="Cf2-zF-GU2" secondAttribute="centerY" id="zCG-7f-nwy"/>
