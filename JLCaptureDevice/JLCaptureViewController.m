@@ -30,6 +30,8 @@ typedef enum {
 @property (nonatomic,strong) AVCaptureStillImageOutput *imageOutput;///<照片输出
 
 @property (nonatomic,assign) JLStatus recordStatus;
+@property (nonatomic,assign) BOOL cameraAuthor;
+@property (nonatomic,assign) BOOL audioAuthor;
 
 #pragma mark - View
 @property (nonatomic,strong) AVCaptureVideoPreviewLayer *previewLayer;
@@ -43,7 +45,9 @@ typedef enum {
     // Do any additional setup after loading the view, typically from a nib.
     
     // 1 初始化相机
-    [self initCamera];
+    if ([self cameraAuthorization]) {
+        [self initCamera];
+    }
     // 2 初始化UI
     [self setupUI];
     // 3 设置默认模式
@@ -304,16 +308,22 @@ typedef enum {
 }
 
 - (BOOL)cameraAuthorization {
-    return [self authorizeMediaType:AVMediaTypeVideo];
+    self.cameraAuthor = [self authorizeMediaType:AVMediaTypeVideo];
+    return self.cameraAuthor;
 }
 
 - (BOOL)audioAuthorization {
-    return [self authorizeMediaType:AVMediaTypeAudio];
+    self.audioAuthor = [self authorizeMediaType:AVMediaTypeAudio];
+    return self.audioAuthor;
 }
 
 #pragma mark - Init
 
 - (void)initRecordMovie {
+    
+    if (!self.cameraAuthor || !self.audioAuthor) {
+        return;
+    }
     
     // 移除图像输出
     if (_imageOutput && [_captureSession.outputs containsObject:_imageOutput]) {
@@ -368,6 +378,11 @@ typedef enum {
 }
 
 - (void)initTakePicture {
+    
+    if (!self.cameraAuthor) {
+        return;
+    }
+    
     // 移除视频输出
     if (_fileOutput && [_captureSession.outputs containsObject:_fileOutput]) {
         [_captureSession removeOutput:_fileOutput];
@@ -402,6 +417,10 @@ typedef enum {
 
 - (void)initCamera {
 
+    if (!self.cameraAuthor) {
+        return;
+    }
+    
     // session
     _captureSession = [[AVCaptureSession alloc] init];
 
@@ -450,6 +469,11 @@ typedef enum {
 #pragma mark - Change Device Or Mode
 
 - (void)changeCaptureDevice {
+    
+    if (!self.cameraAuthor) {
+        return;
+    }
+    
     if (self.mode == JLCaptureModeRecordMovie && self.recordStatus == JLStatusRecording) {
         [self stopRecordMovie];
     }
@@ -551,13 +575,20 @@ typedef enum {
     if (mode == JLCaptureModeTakePicture) {
         [self initTakePicture];
     } else {
-        [self initRecordMovie];
+        if ([self cameraAuthorization] && [self audioAuthorization]) {
+             [self initRecordMovie];
+        }
     }
 }
 
 #pragma mark - Take Picture Or Record
 
 - (void)startRecordMovie {
+    
+    if (!self.cameraAuthor || !self.audioAuthor) {
+        return;
+    }
+    
     if (self.mode == JLCaptureModeTakePicture) {
         return;
     }
@@ -578,6 +609,11 @@ typedef enum {
 }
 
 - (void)takePicture {
+    
+    if (!self.cameraAuthor) {
+        return;
+    }
+    
     if (self.mode == JLCaptureModeRecordMovie) {
         return;
     }
