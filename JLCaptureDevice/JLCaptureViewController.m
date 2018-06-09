@@ -106,8 +106,51 @@ typedef enum {
     self.previewLayer.frame = _previewContainer.bounds;
     // 调整方向
     AVCaptureConnection *captureConnection=[self.previewLayer connection];
-    captureConnection.videoOrientation=(AVCaptureVideoOrientation)toInterfaceOrientation;
+//    captureConnection.videoOrientation=(AVCaptureVideoOrientation)toInterfaceOrientation;
     
+    if (captureConnection.isVideoOrientationSupported) {
+        captureConnection.videoOrientation = [self captureVideoOrientation];
+    }
+    
+    AVCaptureConnection *imageOuputConnection = [_imageOutput connectionWithMediaType:AVMediaTypeVideo];
+    if (imageOuputConnection.isVideoOrientationSupported) {
+        imageOuputConnection.videoOrientation = captureConnection.videoOrientation;
+    }
+    
+    AVCaptureConnection *videoOutputConnection = [self.fileOutput connectionWithMediaType:AVMediaTypeVideo];
+    if (videoOutputConnection.isVideoOrientationSupported) {
+        videoOutputConnection.videoOrientation = captureConnection.videoOrientation;
+    }
+}
+
+#pragma mark - Orientation
+
+- (AVCaptureVideoOrientation)captureVideoOrientation {
+    AVCaptureVideoOrientation result;
+    
+    UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+    switch (deviceOrientation) {
+        case UIDeviceOrientationPortrait:
+        case UIDeviceOrientationFaceUp:
+        case UIDeviceOrientationFaceDown:
+            result = AVCaptureVideoOrientationPortrait;
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            //如果这里设置成AVCaptureVideoOrientationPortraitUpsideDown，则视频方向和拍摄时的方向是相反的。
+            result = AVCaptureVideoOrientationPortrait;
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            result = AVCaptureVideoOrientationLandscapeRight;
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            result = AVCaptureVideoOrientationLandscapeLeft;
+            break;
+        default:
+            result = AVCaptureVideoOrientationPortrait;
+            break;
+    }
+    
+    return result;
 }
 
 #pragma mark - Capture
@@ -397,11 +440,6 @@ typedef enum {
         _imageOutput = [[AVCaptureStillImageOutput alloc] init];
     }
     
-    AVCaptureConnection *connection = [_imageOutput connectionWithMediaType:AVMediaTypeVideo];
-    if (connection.supportsVideoOrientation) {
-        connection.videoOrientation = [self.previewLayer connection].videoOrientation;
-    }
-    
     // 设置图形输出格式
     NSDictionary * outputSettings = @{AVVideoCodecKey:AVVideoCodecJPEG};
     // 输出设置
@@ -412,6 +450,11 @@ typedef enum {
         [_captureSession addOutput:_imageOutput];
     } else {
         NSLog(@"can't add image output");
+    }
+    
+    AVCaptureConnection *connection = [_imageOutput connectionWithMediaType:AVMediaTypeVideo];
+    if (connection.supportsVideoOrientation) { // 需要在session addOutput之后才能判断，否则一直是false
+        connection.videoOrientation = [self captureVideoOrientation];
     }
 }
 
