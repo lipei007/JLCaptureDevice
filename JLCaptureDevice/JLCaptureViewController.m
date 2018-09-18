@@ -44,21 +44,53 @@ typedef enum {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    // 1 初始化相机
+    
     if ([self cameraAuthorization]) {
-        [self initCamera];
+        
+        [self setup];
+        
+    } else {
+        
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+           
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (granted) {
+                    
+                    [self cameraAuthorization];
+                    
+                    [self setup];
+                    [self resetPreview:_previewContainer.bounds];
+                    if (!self.captureSession.isRunning) {
+                        [self.captureSession startRunning];
+                    }
+                    
+                } else {
+                    
+                    NSDictionary* infoDict =[[NSBundle mainBundle] infoDictionary];
+                    NSString *appName = [infoDict objectForKey:@"CFBundleDisplayName"];
+                    __weak typeof(self) weakSelf = self;
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Warning" message:[NSString stringWithFormat:@"Camera access denied, please change %@ setting, allow App use camera. (setting -> privacy -> camera enable %@)",[UIDevice currentDevice].model,appName] preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *action = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                    }];
+                    [alert addAction:action];
+                    [self presentViewController:alert animated:YES completion:nil];
+                    
+                    return;
+                }
+            });
+            
+        }];
+        
     }
-    // 2 初始化UI
-    [self setupUI];
-    // 3 设置默认模式
-    self.mode = JLCaptureModeTakePicture;
+    
 
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (!self.captureSession.isRunning) {
+    if (self.cameraAuthor && !self.captureSession.isRunning) {
         [self.captureSession startRunning];
     }
 }
@@ -73,6 +105,18 @@ typedef enum {
         [self.captureSession stopRunning];
     }
     
+}
+
+- (void)setup {
+    
+    // 1 初始化相机
+    [self initCamera];
+    
+    // 2 初始化UI
+    [self setupUI];
+    
+    // 3 设置默认模式
+    self.mode = JLCaptureModeTakePicture;
 }
 
 - (void)setupUI {
@@ -94,19 +138,16 @@ typedef enum {
         [_previewContainer.layer insertSublayer:self.previewLayer atIndex:0];
     }
     
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [self resetPreview:_previewContainer.bounds];
     
-    self.previewLayer.frame = _previewContainer.bounds;
+}
+
+- (void)resetPreview:(CGRect)frame {
+    
+    self.previewLayer.frame = frame;
     // 调整方向
     AVCaptureConnection *captureConnection=[self.previewLayer connection];
-//    captureConnection.videoOrientation=(AVCaptureVideoOrientation)toInterfaceOrientation;
+    //    captureConnection.videoOrientation=(AVCaptureVideoOrientation)toInterfaceOrientation;
     
     if (captureConnection.isVideoOrientationSupported) {
         captureConnection.videoOrientation = [self captureVideoOrientation];
@@ -121,6 +162,16 @@ typedef enum {
     if (videoOutputConnection.isVideoOrientationSupported) {
         videoOutputConnection.videoOrientation = captureConnection.videoOrientation;
     }
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    
+    [self resetPreview:_previewContainer.bounds];
 }
 
 #pragma mark - Orientation
